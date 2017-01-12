@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EmberJs in a Drupal world</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
+
+      @font-face {
+        font-family: Brig;
+        src: local("Brig"),
+             url(assets/font/Brig.ttf);
+      }
+
+      @font-face {
+        font-family: Funfish;
+        src: local("Funfish"),
+             url(assets/font/funfish_sg.ttf);
+      }
+
+      @font-face {
+        font-family: Tropb;
+        src: local("Tropb"),
+             url(assets/font/TROPB___.ttf);
+      }
+
+      body { font-family: 'Open Sans'; }
+
+      b {
+        color: #013220;
+      }
+
+      h1, h2, h3 {
+        font-family: 'Brig';
+        font-weight: normal;
+      }
+      .funfish {
+        font-family: "Funfish";
+      }
+      .tropb {
+        font-family: "Tropb";
+      }
+
+      ul {
+        font-size: 1.8em;
+      }
+
+      ul.smaller {
+        font-size: 1.3em;
+      }
+
+      .vmiddle {
+        bottom: 0;
+        left: 15%;
+        margin: auto;
+        position: absolute;
+        top: 25%;
+      }
+
+      .fwidth img {
+        width: 100%;
+      }
+
+      .afwidth img {
+        width: 80%;
+      }
+
+      .hwidth img {
+        width: 50%;
+      }
+
+      blockquote {
+        background-color: #fff;
+        padding: 5px 20px;
+      }
+
+      .ember-construction {
+        background: url('assets/img/tomster-under-construction.png') center calc(250%) no-repeat, url(assets/img/bg-white.jpeg) center;
+      }
+
+      .drupal-8-logo {
+        background: url('assets/img/drupal-8.png') center calc(120%) no-repeat, url(assets/img/bg-white.jpeg) center;
+      }
+
+      .learn-about-ember {
+        background: url('assets/img/deprecated.png') center calc(250%) no-repeat, url(assets/img/bg-white.jpeg) center;
+      }
+
+      .ember-smelly {
+        background: url('assets/img/tomster-bug.png') center calc(100%) no-repeat, url(assets/img/bg-white.jpeg) center;
+      }
+
+      .imgico img {
+        width: 45px;
+        vertical-align: bottom;
+      }
+
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+      .thank-you-img img {
+        width: 60%;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+background-image: url(assets/img/bg-white.jpeg)
+
+---
+
+class: center, middle
+
+# EmberJs in a Drupal world
+
+---
+
+# /me
+
+* Web developer at Okinawa Institute of Science and Technology .imgico[![OIST logo](assets/img/oist-logo.png)]
+* Long term Drupal .imgico[![Drupal logo](assets/img/druplicon-small.png)] contributor
+* [@pcambra](https://www.twitter.com/pcambra) in Twitter
+* [pcambra](https://www.drupal.org/u/pcambra) in Drupal.org
+* Mostly abandoned blog at [Cambrico.net](http://www.cambrico.net)
+
+???
+
+Notes notes notes
+
+---
+
+class: center, middle
+
+# Why are we here?
+
+???
+
+Context of the project, talk about tida, the problems that we're facing and
+how a decoupled approach would help.
+
+---
+
+# What are the benefits of a decoupled approach?
+
+???
+
+--
+- Separation of concerns
+
+???
+Backend can be tweaked for content administration, frontend is enhanced for user experience
+Also frontend can be replaced as it is a more often need. Backend too!
+--
+- Easier implementation of client side technologies such as service workers, offline first, real time...
+
+--
+- Development pipeline
+
+???
+Frontend &amp; backend can be separated more easily.
+--
+- API approach and COPE
+
+???
+
+API approach, COPE. Define a more solid data model that can be independently tested.
+
+---
+
+class: center, middle, ember-construction
+background-image: ''
+
+# Why are we talking about Ember?
+
+???
+
+In December 2011, the SproutCore 2.0 framework was renamed to Ember.js
+Showcases: Discourse, Groupon, Twitch.tv or Apple Music(Desktop)
+
+---
+
+class: center, middle
+
+# Convention over configuration
+
+???
+Coming from RoR "software design paradigm used by software frameworks that
+attempt to decrease the number of decisions that a developer using the framework
+is required to make without necessarily losing flexibility."
+
+---
+
+class: center, middle
+
+# best practices and bias towards quality
+
+???
+
+Ember is quite opinionated and includes best practices to ease the learning process.
+One of the conventions is autogenerate a test for every element created.
+
+---
+class: center, middle
+
+# Stability without stagnation
+
+???
+
+This is the idea that backward compatibility is important and can be maintained
+while still innovating and evolving the framework.
+2.9 and 2.10 have been mostly a drop-in replacement
+
+---
+
+class: center, middle
+
+#  Web standards early adopter
+
+???
+
+Ember has been an early adopter and pioneer of many standards around Javascript
+and the web including promises, web components[13] and ES6 syntax.
+
+---
+
+class: center, middle
+
+# Ideal to succeed in small teams
+
+???
+
+Excellent option for smallish teams that need to worry more about business rules
+than the tool itself.
+Good guidance for novices, lots of decisions are made for you.
+Ember provides you with the 10 first floors of your skyscrapper.
+
+---
+
+class: center, middle, drupal-8-logo
+background-image: ''
+
+# there's something in it for the Drupal folk
+
+???
+
+For Drupal folks, Ember ships with jQuery.
+For Drupal 8 folks, Ember data models are based in JsonAPI, more of this later.
+JSONAPI spec became stable in May 2015, it is a standard way to design apis
+that includes relationships, sparse fieldsets, pagination, etc.
+
+---
+
+class: center, middle
+
+# facilitates the integration of external code
+
+???
+
+Really easy to integrate external libraries. Bower integration for things such
+bootstrap. Browserify for node packages.
+
+---
+
+class: center, middle
+
+# Healthy ecosystem &amp; very strong community
+
+???
+Very strong community. Impecably maintained project.
+Ember is not a Facebook or Google product.
+Really high quality side-projects such as ember data for data modeling,
+ember cli for scaffolding/console, fastboot for server-side rendering...
+
+---
+
+class: center, middle, learn-about-ember
+background-image: ''
+
+# Let's learn more about Ember
+
+???
+
+Let's stop for a second and learn a few basic things about Ember
+Read the room, how many have worked with ember already, how many are frontend devs.
+
+---
+
+# basic conventions
+
+.center.fwidth[![Take this](assets/img/ember-graph.png)]
+
+---
+
+.center.fwidth[![Take this](assets/img/alone.jpeg)]
+
+---
+
+# meet Ember-cli
+
+- Command line tool to scaffold EmberJs projects
+- Uses Broccoli .imgico[![Broccoli logo](assets/img/logo-broccoli.png)] to pipeline commands
+- Manages module import, package dependencies, both Bower and NPM
+- Takes care of compilation of assets
+- Runtime configuration variables, addons, testing support...
+
+???
+
+Broccoli takes a source node (or directory) that can be watched or not and
+procesess an input node, transform it and returns an output node. (Graph)
+Code in ES2015 -> Transpiler (broccoli-babel-transpiler) -> ES5 -> [Chain]->
+Concatenation (brocoli concat) -> Uglify -> etc
+Ember cli wraps the broccoli build and is extendable, by adding assets to your
+app, such as new js or css from bower components of adding hooks for each
+tree/node process such as when addons are compiled and pre/post process
+guaranteeing full control on what js ends in your dist.
+
+---
+
+# meet Ember-cli
+
+Initializes an app structure
+```bash
+ember init
+```
+
+Builds the application in a dist or custom folder
+```bash
+ember build
+```
+
+Serves the app in port 4200 or custom, polls for changes.
+```bash
+ember serve
+```
+
+Generates the files required for the element
+```bash
+ember generate route posts
+```
+
+Installs an addon
+```bash
+ember install ember-moment
+```
+
+???
+
+---
+# Ember routes
+
+```bash
+ember generate route posts
+
+installing route
+*  create app/routes/posts.js
+*  create app/templates/posts.hbs
+updating router
+*  add route posts
+installing route-test
+  create tests/unit/routes/posts-test.js
+```
+
+app/router.js
+```javascript
+Router.map(function() {
+  this.route('posts', { path: '/posts' });
+});
+```
+
+???
+
+Route-Driven Development
+Ember is highly dependant on the URLS, routes are defined in a router object.
+Talk about routes, introduce handlebars and nested routes.
+
+---
+# Ember models
+
+```bash
+ember g model post
+ember g model category
+```
+
+app/models/post.js
+```javascript
+import DS from 'ember-data';
+export default DS.Model.extend({
+* title: DS.attr('string'),
+  body: DS.attr('string'),
+  image: DS.attr('string'),
+* categories: DS.hasMany('category'),
+});
+```
+app/models/category.js
+```javascript
+import DS from 'ember-data';
+export default DS.Model.extend({
+  label: DS.attr('string'),
+  post: DS.belongsTo('post'),
+});
+```
+
+???
+
+Talk about async models
+The missing piece: the controller.
+
+Data Down, Actions Up.
+This is the principle that data should be passed down from the routes to the
+controllers and then to the components, and actions should be passed up from
+components to controllers and finally back to the routes.
+
+---
+# Displaying data
+
+app/routes/posts.js
+```javascript
+export default Ember.Route.extend({
+* model: function() {
+    return [
+      {
+        id: 1,
+        title: 'Godzilla Invades Tokyo',
+        body: 'A 20-foot sea monster had emerged from the waters of Tokyo Bay...',
+        image: 'images/godzilla_planning.jpg',
+        category: [
+          {
+            id: 1,
+            label: 'Monsters'
+          },
+          {
+            id: 2,
+            label: 'Not again!'
+          }
+        ]
+      },
+      (...)
+    ];
+  }
+});
+```
+
+???
+
+Let's modify the route to include some data...
+
+Ember Data is a model persistence library for Ember.js. It manages
+communication between the front-end application and an API that persists and
+loads model data.
+
+It abstracts away from loading and saving data to the backend minimizing
+round-trips to the server. It also manages relationships, is highly
+customizable and can adapt the API data model.
+
+The API follows the JSON API specification. It is removes bikeshedding by
+providing a standard to communicate data so you don't have to spend development
+time agreeing about API design
+
+Mention controllers.
+
+---
+# Ember templates: handlebars &amp; moustache
+
+app/templates/posts.hbs
+```handlebars
+{{#each model as |post|}}
+  <article class="post">
+    <h1>{{post.title}}</h1>
+    <div class="body">
+      {{post.body}}
+    </div>
+    <div class="categories">
+      {{#each post.category as |category|}}
+        <span>{{category.label}}</span>
+      {{/each}}
+    </div>
+  </article>
+{{/each}}
+```
+
+???
+
+Mention components
+
+---
+# Adding a bit of bootstrap magic
+
+```bash
+ember install ember-bootstrap
+```
+app/templates/posts.hbs
+```handlebars
+*<ul class="media-list main-list list-group">
+  {{#each model as |post|}}
+*   <li class="list-group-item media">
+        <img class="pull-left media-object" src="{{post.image}}">
+        <div class="media-body">
+          <h2 class="media-heading">{{post.title}}</h2>
+          <div class="body">{{post.body}}</div>
+          <div class="categories">
+            {{#each post.category as |category|}}
+              <span>{{category.label}}</span>
+            {{/each}}
+          </div>
+        </div>
+    </li>
+  {{/each}}
+</ul>
+```
+
+???
+
+Adding bootstrap adds it to the package.json dependencies and the library in bower.
+
+---
+# RAWR
+
+.center.fwidth[![rawr](assets/img/godzilla-listing.jpg)]
+
+???
+
+srcs:
+https://www.flickr.com/photos/76074333@N00/317952268/
+https://www.flickr.com/photos/21148821@N02/2055973802/
+
+---
+# Adding Drupal to the mix
+
+.center.afwidth[![Found my shop](assets/img/you_found_my_shop.png)]
+
+---
+
+# Adding Drupal to the mix
+
+- Ember uses JSON API internally to represent **models**
+- Drupal module <a href="https://www.drupal.org/project/jsonapi">JSON API</a> provides out of the box json resources.
+- <a href="https://github.com/boztek/ember-data-drupal">Ember Data Drupal</a> addon with JSON API support.
+- Other options: Core REST module for entities and custom endpoints. Also <a href="https://www.drupal.org/project/relaxed">RELAXed Web Services</a>
+
+???
+
+Talk about JSON API and the drupal module. (use dev version)
+Talk about model modifiers: serializer/deserializer.
+Talk about how Ember can modify almost everything in your request. show code.
+Mention the ember addon to integrate automatically.
+And if you don't want to use JSON API you can use Json or even plain REST.
+
+Talk about core rest api and custom endpoints.
+Talk about other options such as relaxed.
+
+---
+# Adding Drupal to the mix
+
+```bash
+ember serve --proxy=http://drupal-backend.tld:3000
+```
+
+OR
+
+config/environment.js
+```javascript
+var ENV = {
+  modulePrefix: 'ember-drupal',
+  environment: environment,
+  rootURL: '/',
+  locationType: 'auto',
+* host: 'http://drupal-backend.tld:3000',
+  EmberENV: {
+    FEATURES: {
+(...)
+```
+
+???
+
+We connect our Ember app with a Drupal backend.
+proxy is not recommended for production installs.
+
+---
+# Adding Drupal to the mix
+
+app/routes/posts.js
+```javascript
+model: function() {
+* return this.store.findAll('post');
+}
+```
+
+Not quite there yet...
+
+```bash
+Error while processing route: posts
+Ember Data Request GET http://drupal-backend.tld/jsonapi/posts returned a 404
+```
+
+???
+
+We replace the static models by a simple Ember Data query.
+Remember to enable CORS on the Drupal side.
+
+---
+
+# url request mismatch
+
+Ember, by default tries to call:
+
+.center.afwidth[![Ember url](assets/img/ember-url.jpg)]
+
+Drupal + JSON API expects:
+
+.center.afwidth[![Drupal url](assets/img/drupal-url.jpg)]
+
+???
+
+Drupal url is a bit more complicated to alter that Ember's.
+
+---
+
+# meet ember adapters
+
+app/adapters/application.js
+```JavaScript
+export default DS.JSONAPIAdapter.extend({
+* host: ENV.host,
+* namespace: ENV.namespace,
+  pathForType(modelName) {
+    if (modelName === 'post') {
+      return 'node/post';
+    }
+  },
+  buildQuery(snapshot) {
+    let query = this._super(...arguments);
+    query._format = 'api_json';
+    return query;
+  },
+});
+```
+**Note:** host and namespace are configured in config/environment.js
+
+???
+
+In Ember Data, the Adapter determines how data is persisted to a backend data
+store, such as the URL format and headers for a REST API.
+The format of the data itself is determined by the serializer.
+Ember expects the adapters to be customized to acommodate the data model.
+JSONAPIAdapter > RESTAdapter
+
+---
+
+# meet ember serializers
+
+```bash
+ember.debug.js:7062 WARNING: Encountered a resource object with type
+"node--post", but no model was found for model name "node--post"
+```
+
+app/adapters/application.js
+```javascript
+export default DS.JSONAPIAdapter.extend({
+*+ defaultSerializer: 'drupal-serializer',
+  host: ENV.host,
+  namespace: ENV.namespace,
+  (...)
+```
+
+app/serializers/drupal-serializer.js
+```javascript
+export default JSONAPISerializer.extend({
+* modelNameFromPayloadKey(payloadKey) {
+    let parts = payloadKey.split('--');
+    if (parts.length === 2) {
+      return parts[1];
+    }
+    return payloadKey;
+  }
+});
+```
+
+???
+
+In Ember Data, serializers format the data sent to and received from the backend
+store. By default, Ember Data serializes data using the JSON API format.
+If your backend uses a different format, Ember Data allows you to customize the
+serializer or use a different serializer entirely.
+
+JSONAPISerializer > JSONSerializer > RESTSerializer
+
+---
+# Adding Drupal to the mix
+
+app/models/post.js
+```javascript
+export default DS.Model.extend({
+  title: DS.attr('string'),
+  body: DS.attr(),
+* field_image: DS.belongsTo('file'),
+  field_category: DS.hasMany('category'),
+});
+```
+app/models/file.js
+```javascript
+export default DS.Model.extend({
+  url: DS.attr('string'),
+});
+```
+app/models/category.js
+```javascript
+export default DS.Model.extend({
+  name: DS.attr('string'),
+  post: DS.belongsTo('post'),
+});
+```
+
+???
+
+---
+# Adding Drupal to the mix
+
+Ember will query the model relationships asyncronously (by default), so we need
+to adapt the url that is calling.
+
+app/adapters/application.js
+```javascript
+(...)
+pathForType(modelName) {
+  if (modelName === 'post') {
+    return 'node/post';
+  }
+*+if (modelName === 'category') {
+*+  return 'taxonomy_term/category';
+*+}
+*+if (modelName === 'file') {
+*+  return 'file/file';
+*+}
+},
+(...)
+```
+
+???
+
+A couple of gotchas.
+
+---
+class: ember-smelly
+background-image: ''
+
+# Adding Drupal to the mix
+
+Ember considers hypens (-) as the separator by default for model properties,
+but Drupal uses underscore (_). We can change that in the serializer:
+
+app/serializers/drupal-serializer.js
+```javascript
+(...)
+*+keyForRelationship(key, typeClass, method) {
+*+  return underscore(key);
+*+},
+*+keyForAttribute(key, method) {
+*+  return underscore(key);
+*+}
+(...)
+```
+
+---
+# Computed properties
+
+app/models/file.js
+```javascript
+import DS from 'ember-data';
+import ENV from '../config/environment';
+
+export default DS.Model.extend({
+  url: DS.attr('string'),
+*+fullURL: Ember.computed('url', function() {
+*+  return ENV.host + '/' + this.get('url');
+*+})
+});
+```
+
+???
+In a nutshell, computed properties let you declare functions as properties.
+You create one by defining a computed property as a function, which Ember will
+automatically call when you ask for the property. You can then use it the same
+way you would any normal, static property.
+
+It's super handy for taking one or more normal properties and transforming or
+manipulating their data to create a new value.
+---
+# Final template
+
+```handlebars
+<ul class="media-list main-list list-group">
+  {{#each model as |post|}}
+    <li class="list-group-item media">
+*+      <img class="pull-left media-object" src="{{post.field_image.fullURL}}">
+        <div class="media-body">
+*+        <h2 class="media-heading">{{post.title}}</h2>
+          <div class="body">
+*+          {{post.body.value}}
+          </div>
+          <div class="categories">
+*+          {{#each post.field_category as |category|}}
+*+            <span>{{category.name}}</span>
+            {{/each}}
+          </div>
+        </div>
+    </li>
+  {{/each}}
+</ul>
+```
+
+---
+#success!
+
+.center.fwidth[![Godzilla in Hollywood](assets/img/godzilla-hollywood.jpg)]
+
+???
+
+src: https://www.flickr.com/photos/cowbite/2678625827/
+
+---
+## Challenges of decoupling
+
+.center.afwidth[![punchout](assets/img/punchout.png)]
+
+---
+## Challenges of decoupling
+
+Working in a headless environment means that we're trading of some of the things that Drupal provide out of the box such as:
+
+- Authentication
+- Form generation and validation
+- Search engine optimization
+- Multilingual and localization
+- Cross-origin requests and security
+
+???
+
+We will discuss some of these challenges we've found while building this app and how we've overcome them.
+
+---
+
+## Authentication / Authorization
+
+- Security and controlling access is ticky.
+- <a href="https://github.com/simplabs/ember-simple-auth">Ember simple auth</a> provides a solid base.
+- Drupal module <a href="https://www.drupal.org/project/simple_oauth">Simple Oauth</a> integrates perfectly with a token/bearer authorization approach.
+- Ember is flexible to add logic to <b>authenticators</b>, <b>authorizers</b> and <b>serializers</b>.
+
+???
+
+https://auth0.com/blog/cookies-vs-tokens-definitive-guide/
+
+We needed to log in with a SAML provider (similar to Oauth) which makes it a third guest in our party.
+We did not want to just use the Drupal session, so we leveraged the simple oauth module.
+When a user logs in in the system, a token is automatically generated and injected in the Ember app that
+then uses it to validate further requests.
+
+Ember is extremely flexible and simple auth allows you to store the tokens in localstorage or a cookie or even customize it.
+Ember provides a system of Adapters and Serializers that allow you to make your own.
+
+Ember simple auth provides mixins that use the ember hooks to mark pages as auth only and use beforeModel to ensure the authorization is valid.
+
+Other options to explore can be using JWT and include info about the user in the Token.
+
+---
+## Files and images: DIY for now
+
+- base64 seems to be the way to go for Drupal core (<a href="https://www.drupal.org/node/1927648">https://www.drupal.org/node/1927648</a>)
+- JSON API Drupal module doesn't support files either ((<a href="https://www.drupal.org/node/2785345">https://www.drupal.org/node/2785345</a>))
+- Multipart-forms seem to perform better.
+- base64 has a simpler generic implementation.
+
+???
+Files are not quite well handled by Drupal 8 yet.
+
+---
+
+class: center, middle
+
+# Wrapping up
+
+???
+
+---
+
+## to decouple, or not to decouple... .imgico[![macbeth](assets/img/skull.png)]
+
+- Drupal is great solving the hard problems. <b>Evaluate carefully the trade-offs</b>.
+- Go for a decoupled if your API will have multiple consumers.
+- Consider decoupling for cutting edge front-end implementations.
+- Heavy content workflows / Classic websites: <b>Don't do it</b>.
+
+???
+Ember works great for delegating content elsewhere.
+Ember is not the only fish in the sea. Make an informed decission.
+it is a good tool for non-experienced javascript devs as it provides a lot of guidance and best practices.
+
+---
+
+# A few tips and tricks
+
+- Ember has changed radically since 1.3, when looking for help, filter out anything > 1 year.
+- <b>Postman Chrome tool</b> is a lifesaver for API checks.
+- <b>Ember inspector</b> works great combined with browser Dev tools.
+- <a href="https://github.com/boztek/ember-data-drupal">Ember Data Drupal</a> is a great reference.
+
+---
+class: center
+## thank you!
+## ありがとうございました！
+
+.center.thank-you-img[![druplicon](assets/img/jp-druplicon.png)]
+
+
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+    var slideshow = remark.create({
+      ratio: '4:3',
+      highlightLines: true,
+      highlightStyle: 'googlecode'
+    });
+    </script>
+  </body>
+</html>
